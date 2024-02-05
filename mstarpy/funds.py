@@ -1,9 +1,10 @@
-from bs4 import BeautifulSoup
 import datetime
 import json
 import pandas as pd
 import re
 import requests
+from waring import deprecated
+from bs4 import BeautifulSoup
 
 from .error import no_site_error, not_200_response
 from .search import search_funds, token_investment_strategy
@@ -51,7 +52,7 @@ class Funds(Security):
             >>> Funds("myria", "fr").allocationMap()
 
         """
-        return self.GetData("process/asset/v2")
+        return self.getData("process/asset/v2")
 
     def allocationWeighting(self):
         """
@@ -64,7 +65,7 @@ class Funds(Security):
             >>> Funds("myria", "fr").allocationWeighting()
         
         """
-        return self.GetData("process/weighting")
+        return self.getData("process/weighting")
 
     def analystRating(self):
         """
@@ -78,7 +79,7 @@ class Funds(Security):
         """
         
 
-        return self.GetData("parent/analystRating")
+        return self.getData("parent/analystRating")
 
     def analystRatingTopFunds(self):
         """
@@ -91,7 +92,7 @@ class Funds(Security):
             
         """
         
-        return self.GetData("parent/analystRating/topfunds")
+        return self.getData("parent/analystRating/topfunds")
 
 
     def analystRatingTopFundsUpDown(self):
@@ -105,7 +106,7 @@ class Funds(Security):
             
         """
 
-        return self.GetData("parent/analystRating/topfundsUpDown")
+        return self.getData("parent/analystRating/topfundsUpDown")
 
 
 
@@ -152,8 +153,11 @@ class Funds(Security):
 
         return details
 
-
+    @deprecated("This method will be replaced by 'anualPerformance' methode of the Funds class.")
     def AnnualPerformance(self, cat):
+        return self.annualPerformance(cat)
+
+    def annualPerformance(self, cat):
         """
         This function retrieves the annual performance of the funds, index, category or the annual rank of the funds.
 
@@ -166,10 +170,10 @@ class Funds(Security):
             ValueError : raised whenever parameter cat is not category, funds, index, or rank
 
         Examples:
-            >>> Funds("myria", "fr").AnnualPerformance("category")
-            >>> Funds("myria", "fr").AnnualPerformance("funds")
-            >>> Funds("myria", "fr").AnnualPerformance("index")
-            >>> Funds("myria", "fr").AnnualPerformance("rank")
+            >>> Funds("myria", "fr").annualPerformance("category")
+            >>> Funds("myria", "fr").annualPerformance("funds")
+            >>> Funds("myria", "fr").annualPerformance("index")
+            >>> Funds("myria", "fr").annualPerformance("rank")
 
         """
         no_site_error(self.code,self.name,self.country,self.site)
@@ -235,7 +239,7 @@ class Funds(Security):
 
         """
 
-        return self.GetData("esg/carbonMetrics")
+        return self.getData("esg/carbonMetrics")
 
     def category(self):
         """
@@ -262,7 +266,7 @@ class Funds(Security):
             >>> Funds("myria", "fr").categoryAnnualPerformance()
 
         """
-        return self.AnnualPerformance('category')
+        return self.annualPerformance('category')
 
     def categoryCumulativePerformance(self):
         """
@@ -321,7 +325,7 @@ class Funds(Security):
             >>> Funds("FOUSA00E5P", "us").costIllustration()
 
         """
-        return self.GetData("price/costIllustration")
+        return self.getData("price/costIllustration")
 
     def couponRange(self):
         """
@@ -334,7 +338,7 @@ class Funds(Security):
             >>> Funds("rmagx", "us").couponRange()
 
         """
-        return self.GetData("process/couponRange")
+        return self.getData("process/couponRange")
 
 
     def creditQuality(self):
@@ -348,9 +352,9 @@ class Funds(Security):
             >>> Funds("rmagx", "us").creditQuality()
 
         """
-        return self.GetData("portfolio/creditQuality")
+        return self.getData("portfolio/creditQuality")
 
-    def dataPoint(self, field, currency ='EUR'):
+    def dataPoint(self, field, currency='EUR'):
         """
         This function retrieves infos about funds such as name, performance, risk metrics...
 
@@ -366,7 +370,7 @@ class Funds(Security):
             >>> Funds("myria", "fr").dataPoint('SharpeM36')
 
         """
-        return search_funds(self.code, field,self.country,10,currency, proxies=self.proxies)
+        return search_funds(self.code, field, self.country, 10, currency, proxies=self.proxies)
 
     def distribution(self, period = "annual"):
         """
@@ -391,11 +395,14 @@ class Funds(Security):
         if period not in period_choice:
             raise ValueError(f'period parameter can only take one of the values: {", ".join(period_choice)}')
 
-        return self.GetData(f"distribution/{period}")
+        return self.getData(f"distribution/{period}")
 
 
-
+    @deprecated("This method will be replaced by 'cumulativePerformance' methode of the Funds class.")
     def CumulativePerformance(self, cat):
+        return self.cumulativePerformance(cat)
+
+    def cumulativePerformance(self, cat):
         """
         This function retrieves the cumulative performance of funds, index and category.
 
@@ -454,7 +461,7 @@ class Funds(Security):
             >>> Funds("myria", "fr").equityStyle()
 
         """
-        return self.GetData("process/stockStyle/v2")
+        return self.getData("process/stockStyle/v2")
     
     def equityStyleBoxHistory(self):
         """
@@ -467,7 +474,7 @@ class Funds(Security):
             >>> Funds("myria", "fr").equityStyleBoxHistory()
 
         """
-        return self.GetData("process/equityStyleBoxHistory")
+        return self.getData("process/equityStyleBoxHistory")
 
     def esgData(self):
         """
@@ -481,7 +488,7 @@ class Funds(Security):
 
         """
 
-        return self.GetData("esg/v1")
+        return self.getData("esg/v1")
 
     def factorProfile(self):
         """
@@ -494,7 +501,7 @@ class Funds(Security):
             >>> Funds("myria", "fr").factorProfile()
 
         """
-        return self.GetData("factorProfile")
+        return self.getData("factorProfile")
 
     def feeLevel(self):
         """        
@@ -507,7 +514,7 @@ class Funds(Security):
             >>> Funds("rmagx", "us").feeLevel()
 
         """
-        return self.GetData("price/feeLevel")
+        return self.getData("price/feeLevel")
     
     def feeMifid(self,currency="EUR"):
         """        
@@ -565,7 +572,7 @@ class Funds(Security):
             >>> Funds("rmagx", "us").financialMetrics()
 
         """
-        return self.GetData("process/financialMetrics")
+        return self.getData("process/financialMetrics")
 
 
     def fixedIncomeStyle(self):
@@ -580,7 +587,7 @@ class Funds(Security):
 
         """
 
-        return self.GetData("process/fixedIncomeStyle")
+        return self.getData("process/fixedIncomeStyle")
 
     def fixedincomeStyleBoxHistory(self):
         """        
@@ -593,7 +600,7 @@ class Funds(Security):
             >>> Funds("rmagx", "us").fixedincomeStyleBoxHistory()
 
         """
-        return self.GetData("process/fixedincomeStyleBoxHistory")
+        return self.getData("process/fixedincomeStyleBoxHistory")
 
     def fundsAnnualPerformance(self):
         """        
@@ -606,7 +613,7 @@ class Funds(Security):
             >>> Funds("myria", "fr").fundsAnnualPerformance()
 
         """
-        return self.AnnualPerformance('funds')
+        return self.annualPerformance('funds')
 
     def fundsAnnualRank(self):
         """        
@@ -619,7 +626,7 @@ class Funds(Security):
             >>> Funds("myria", "fr").fundsAnnualRank()
 
         """
-        return self.AnnualPerformance('rank')
+        return self.annualPerformance('rank')
 
     def fundsCumulativePerformance(self):
         """        
@@ -697,7 +704,7 @@ class Funds(Security):
    
         """
 
-        return self.GetData("parent/graphData")
+        return self.getData("parent/graphData")
 
     def historicalData(self):
         """
@@ -710,7 +717,7 @@ class Funds(Security):
             >>> Funds("myria", "fr").historicalData()
 
         """
-        return self.GetData("performance/v3", url_suffixe='')
+        return self.getData("performance/v3", url_suffixe='')
 
 
 
@@ -727,7 +734,7 @@ class Funds(Security):
         """
         if self.asset_type == 'etf':
             return {}
-        return self.GetData("price/historicalExpenses")
+        return self.getData("price/historicalExpenses")
 
     def holdings(self, holdingType: str = 'all'):
         """        
@@ -771,7 +778,7 @@ class Funds(Security):
             >>> Funds("myria", "fr").indexAnnualPerformance()
 
         """
-        return self.AnnualPerformance('index')
+        return self.annualPerformance('index')
 
     def indexCumulativePerformance(self):
         """
@@ -804,7 +811,7 @@ class Funds(Security):
         headers = {
                     'authorization': f'Bearer {bearer_token}',
                     }
-        return self.GetData("morningstarTake/investmentStrategy",headers=headers)
+        return self.getData("morningstarTake/investmentStrategy",headers=headers)
         
     def investmentLookup(self,currency="EUR"):
         """        
@@ -830,7 +837,7 @@ class Funds(Security):
             >>> Funds("myria", "fr").marketCapitalization()
 
         """
-        return self.GetData("process/marketCap")
+        return self.getData("process/marketCap")
 
 
     def maturitySchedule(self):
@@ -844,7 +851,7 @@ class Funds(Security):
             >>> Funds("rmagx", "us").maturitySchedule()
 
         """
-        return self.GetData("process/maturitySchedule")
+        return self.getData("process/maturitySchedule")
 
 
     def maxDrawDown(self, year = 3):
@@ -869,7 +876,7 @@ class Funds(Security):
             raise TypeError('year parameter should be an integer')
 
 
-        return self.GetData("performance/marketVolatilityMeasure", params = {"year": year})
+        return self.getData("performance/marketVolatilityMeasure", params = {"year": year})
 
     def morningstarAnalyst(self):
         """
@@ -883,7 +890,7 @@ class Funds(Security):
    
         """
 
-        return self.GetData("morningstarAnalyst")
+        return self.getData("morningstarAnalyst")
 
     def multiLevelFixedIncomeData(self, primary = "superEffectiveDuration", secondary = "superSector.weight"):
         """
@@ -916,7 +923,7 @@ class Funds(Security):
         if primary == "creditQuality" and secondary == "creditQuality.weight":
             raise ValueError(f'primary and secondary parameters cannot be both credit quality')
 
-        return self.GetData("multiLevelFixedIncomeData", params = {"primary": primary,"secondary": secondary})
+        return self.getData("multiLevelFixedIncomeData", params = {"primary": primary,"secondary": secondary})
 
     def nav(self,start_date,end_date,frequency="daily"):
         """
@@ -938,7 +945,7 @@ class Funds(Security):
 
         """
 
-        return self.TimeSeries(["nav","totalReturn"],
+        return self.timeSeries(["nav","totalReturn"],
                                 start_date=start_date,end_date=end_date,frequency=frequency)
             
         
@@ -986,7 +993,7 @@ class Funds(Security):
             {'expenseWaiver': False, 'expenseReimbursement': None, 'expirationDate': None, 'expenseWaivers': None}
                     
         """
-        return self.GetData("price/otherFee")
+        return self.getData("price/otherFee")
 
 
     def ownershipZone(self):
@@ -1001,7 +1008,7 @@ class Funds(Security):
 
         """
 
-        return self.GetData("process/ownershipZone")
+        return self.getData("process/ownershipZone")
 
     def parentMstarRating(self):
 
@@ -1016,7 +1023,7 @@ class Funds(Security):
 
         """
 
-        return self.GetData("parent/parentMstarRating")
+        return self.getData("parent/parentMstarRating")
 
     def parentSummary(self):
         """
@@ -1029,7 +1036,7 @@ class Funds(Security):
             >>> Funds("rmagx", "us").parentSummary()
 
         """
-        return self.GetData("parent/parentSummary")
+        return self.getData("parent/parentSummary")
 
     def people(self):
         """
@@ -1042,7 +1049,7 @@ class Funds(Security):
             >>> Funds("rmagx", "us").people()
 
         """
-        return self.GetData("people")
+        return self.getData("people")
 
     def position(self):
         """
@@ -1056,7 +1063,7 @@ class Funds(Security):
   
         """
 
-        return self.GetData("portfolio/holding/v2", params = {"premiumNum" : 10000, "freeNum" : 10000})
+        return self.getData("portfolio/holding/v2", params = {"premiumNum" : 10000, "freeNum" : 10000})
 
     def proxyVotingManagement(self):
         """
@@ -1069,7 +1076,7 @@ class Funds(Security):
             >>> Funds("rmagx", "us").proxyVotingManagement()
 
         """
-        return self.GetData("people/proxyVoting/management")
+        return self.getData("people/proxyVoting/management")
     
 
     def proxyVotingShareHolder(self):
@@ -1083,7 +1090,7 @@ class Funds(Security):
             >>> Funds("rmagx", "us").proxyVotingShareHolder()
 
         """
-        return self.GetData("people/proxyVoting/shareHolder")
+        return self.getData("people/proxyVoting/shareHolder")
 
     def productInvolvement(self):
         """
@@ -1097,7 +1104,7 @@ class Funds(Security):
 
         """
 
-        return self.GetData("esg/productInvolvement")
+        return self.getData("esg/productInvolvement")
 
 
     def referenceIndex(self, index):
@@ -1151,7 +1158,7 @@ class Funds(Security):
             >>> Funds("myria", "fr").regionalSector()
 
         """
-        return self.GetData("portfolio/regionalSector")
+        return self.getData("portfolio/regionalSector")
 
     def regionalSectorIncludeCountries(self):
         """
@@ -1164,7 +1171,7 @@ class Funds(Security):
             >>> Funds("myria", "fr").regionalSectorIncludeCountries()
 
         """
-        return self.GetData("portfolio/regionalSectorIncludeCountries")
+        return self.getData("portfolio/regionalSectorIncludeCountries")
 
 
 
@@ -1179,7 +1186,7 @@ class Funds(Security):
             >>> Funds("rmagx", "us").riskReturnScatterplot()
 
         """
-        return self.GetData("performance/riskReturnScatterplot")
+        return self.getData("performance/riskReturnScatterplot")
 
     def riskReturnSummary(self):
         """
@@ -1193,7 +1200,7 @@ class Funds(Security):
 
         """
 
-        return self.GetData("performance/riskReturnSummary")
+        return self.getData("performance/riskReturnSummary")
 
     def riskVolatility(self):
         """
@@ -1206,7 +1213,7 @@ class Funds(Security):
             >>> Funds("rmagx", "us").riskVolatility()
 
         """
-        return self.GetData("performance/riskVolatility")
+        return self.getData("performance/riskVolatility")
 
     def salesFees(self):
         """
@@ -1221,7 +1228,7 @@ class Funds(Security):
         """
         if self.asset_type == 'etf':
             return {}
-        return self.GetData("price/salesFees")
+        return self.getData("price/salesFees")
 
     def sector(self):
         """
@@ -1234,7 +1241,7 @@ class Funds(Security):
             >>> Funds("myria", "fr").sector()
 
         """
-        return self.GetData("portfolio/v2/sector")
+        return self.getData("portfolio/v2/sector")
     
     def snapshot(self,currency="EUR"):
         """        
@@ -1261,7 +1268,7 @@ class Funds(Security):
  
         """
         
-        return self.GetData("parent/mstarRating/StarRatingFundAsc")
+        return self.getData("parent/mstarRating/StarRatingFundAsc")
 
     def starRatingFundDesc(self):
         """
@@ -1275,7 +1282,7 @@ class Funds(Security):
 
         """
         
-        return self.GetData("parent/mstarRating/StarRatingFundDesc")
+        return self.getData("parent/mstarRating/StarRatingFundDesc")
 
     def sustainability(self,currency="EUR"):
         """        
@@ -1301,7 +1308,7 @@ class Funds(Security):
             >>> Funds("American Century Foc Dynmc Gr ETF").taxes()
 
         """
-        return self.GetData("price/taxes")
+        return self.getData("price/taxes")
 
     def trailingReturn(self, duration ='daily'):
         """
@@ -1326,4 +1333,4 @@ class Funds(Security):
             raise ValueError(f'duration parameter can only take one of the values: {", ".join(duration_choice)}')
 
 
-        return self.GetData("trailingReturn/v2",{"duration" : duration})
+        return self.getData("trailingReturn/v2",{"duration" : duration})

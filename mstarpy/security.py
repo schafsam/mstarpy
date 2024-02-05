@@ -2,6 +2,7 @@ import datetime
 import json
 import re
 import requests
+from warnings import deprecated
 
 from .error import not_200_response
 from .search import search_funds, search_stock, token_chart
@@ -120,9 +121,11 @@ class Security:
             else:
                 raise ValueError(f'0 {self.asset_type} found with the term {term}')
             
-
-
+    @deprecated("Use the 'getData' method. This method will be depreciated.")
     def GetData(self,field,params={},headers={}, url_suffixe='data'):
+        return self.getData(field, params, headers, url_suffixe)
+
+    def getData(self, field, params={}, headers={}, url_suffixe='data'):
         """
         Generic function to use MorningStar global api.
 
@@ -139,7 +142,7 @@ class Security:
             dict with data
 
         Examples:
-            >>> Security("rmagx", "us").GetData("price/feeLevel")
+            >>> Security("rmagx", "us").getData("price/feeLevel")
 
         """
 
@@ -217,11 +220,11 @@ class Security:
         else:
             return {}
 
+    @deprecated()
+    def TimeSeries(self, field, start_date, end_date, frequency="daily"):
+        return self.timeSeries(field, start_date, end_date, frequency)
 
-
-
-
-    def TimeSeries(self,field,start_date,end_date,frequency="daily"):
+    def timeSeries(self, field, start_date, end_date, frequency="daily"):
         """
         This function retrieves historical data of the specified fields
         
@@ -234,7 +237,7 @@ class Security:
             list of dict time series
             
         Examples:
-            >>> Funds("RMAGX", "us").TimeSeries(["nav","totalReturn"],datetime.datetime.today()- datetime.timedelta(30),datetime.datetime.today())
+            >>> Funds("RMAGX", "us").timeSeries(["nav","totalReturn"],datetime.datetime.today()- datetime.timedelta(30),datetime.datetime.today())
 
         Raises:
             TypeError: raised whenever the parameter type is not the type expected

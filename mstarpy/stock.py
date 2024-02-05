@@ -37,7 +37,7 @@ class Stock(Security):
             >>> Stock("visa", exchange="nyse").analysisData()
 
         """
-        return self.GetData("morningstarTake/v3",url_suffixe='analysisData')
+        return self.getData("morningstarTake/v3",url_suffixe='analysisData')
     
     def analysisReport(self):
         """
@@ -50,7 +50,7 @@ class Stock(Security):
             >>> Stock("visa", exchange="nyse").analysisReport()
 
         """
-        return self.GetData("morningstarTake/v4",url_suffixe='analysisReport')
+        return self.getData("morningstarTake/v4",url_suffixe='analysisReport')
     
     def balanceSheet(self, period='annual', reportType='original'):
         """
@@ -82,7 +82,7 @@ class Stock(Security):
             >>> Stock("Alphabet Inc Class A").boardOfDirectors()
     
         """
-        return self.GetData("insiders/boardOfDirectors")
+        return self.getData("insiders/boardOfDirectors")
 
     def cashFlow(self, period='annual', reportType='original'):
         """
@@ -114,7 +114,7 @@ class Stock(Security):
             >>> Stock("visa", exchange="nyse").dividends()
 
         """
-        return self.GetData("dividends/v4")
+        return self.getData("dividends/v4")
     
     def esgRisk(self):
         """
@@ -127,7 +127,7 @@ class Stock(Security):
             >>> Stock("visa", exchange="nyse").esgRisk()
 
         """
-        return self.GetData("esgRisk")
+        return self.getData("esgRisk")
     
     def financialHealth(self):
         """
@@ -140,7 +140,7 @@ class Stock(Security):
             >>> Stock("visa", exchange="nyse").financialHealth()
 
         """
-        return self.GetData("keyStats/financialHealth", url_suffixe='')
+        return self.getData("keyStats/financialHealth", url_suffixe='')
     
     def financialStatement(self,statement ='summary', period='annual', reportType='original'):
         """
@@ -188,11 +188,11 @@ class Stock(Security):
         
         params = {"reportType" : reportType_choice[reportType]}
         if statement == "summary":
-            return self.GetData("newfinancials",params=params, url_suffixe=f"{period}/summary")
+            return self.getData("newfinancials",params=params, url_suffixe=f"{period}/summary")
         
         params["dataType"] = period_choice[period]
 
-        return self.GetData("newfinancials",params=params, url_suffixe=f"{statement_choice[statement]}/detail")
+        return self.getData("newfinancials",params=params, url_suffixe=f"{statement_choice[statement]}/detail")
     
     def financialSummary(self, period='annual', reportType='original'):
         """
@@ -224,7 +224,7 @@ class Stock(Security):
             >>> Stock("visa", exchange="nyse").freeCashFlow()
   
         """
-        return self.GetData("keyStats/cashFlow", url_suffixe='')
+        return self.getData("keyStats/cashFlow", url_suffixe='')
     
     def historical(self, start_date,end_date,frequency="daily"):
         """
@@ -242,7 +242,7 @@ class Stock(Security):
             >>> Stock("visa", exchange="nyse").history(datetime.datetime.today()- datetime.timedelta(30),datetime.datetime.today())
 
         """
-        return self.TimeSeries(["open","high","low","close",
+        return self.timeSeries(["open","high","low","close",
                                 "volume","previousClose","dividend"],
                                 start_date=start_date,end_date=end_date,frequency=frequency)
     def incomeStatement(self, period='annual', reportType='original'):
@@ -281,7 +281,7 @@ class Stock(Security):
         if not isinstance(top, int):
             raise TypeError('top parameter should be an integer')
         
-        return self.GetData("ownership/v1", url_suffixe= f"Buyers/institution/{top}/data")
+        return self.getData("ownership/v1", url_suffixe= f"Buyers/institution/{top}/data")
     
     def institutionConcentratedOwners(self, top=20):
         """
@@ -300,7 +300,7 @@ class Stock(Security):
         if not isinstance(top, int):
             raise TypeError('top parameter should be an integer')
         
-        return self.GetData("ownership/v1", url_suffixe= f"ConcentratedOwners/institution/{top}/data")
+        return self.getData("ownership/v1", url_suffixe= f"ConcentratedOwners/institution/{top}/data")
     
     def institutionOwnership(self, top=20):
         """
@@ -319,7 +319,7 @@ class Stock(Security):
         if not isinstance(top, int):
             raise TypeError('top parameter should be an integer')
         
-        return self.GetData("ownership/v1", url_suffixe= f"OwnershipData/institution/{top}/data")
+        return self.getData("ownership/v1", url_suffixe= f"OwnershipData/institution/{top}/data")
     
     def institutionSellers(self, top=20):
         """
@@ -337,7 +337,7 @@ class Stock(Security):
         if not isinstance(top, int):
             raise TypeError('top parameter should be an integer')
         
-        return self.GetData("ownership/v1", url_suffixe= f"Sellers/institution/{top}/data")
+        return self.getData("ownership/v1", url_suffixe= f"Sellers/institution/{top}/data")
     
     def keyExecutives(self):
         """
@@ -350,7 +350,7 @@ class Stock(Security):
             >>> Stock("visa", exchange="nyse").keyExecutives()
 
         """
-        return self.GetData("insiders/keyExecutives")
+        return self.getData("insiders/keyExecutives")
     def keyRatio(self):
         """
         This function retrieves the key ratio of the stock.
@@ -362,7 +362,7 @@ class Stock(Security):
             >>> Stock("visa", exchange="nyse").keyRatio()
 
         """
-        return self.GetData("keyratios")
+        return self.getData("keyratios")
     
     def mutualFundBuyers(self, top=20):
         """
@@ -381,7 +381,7 @@ class Stock(Security):
         if not isinstance(top, int):
             raise TypeError('top parameter should be an integer')
         
-        return self.GetData("ownership/v1", url_suffixe= f"Buyers/mutualfund/{top}/data")
+        return self.getData("ownership/v1", url_suffixe= f"Buyers/mutualfund/{top}/data")
     
     def mutualFundConcentratedOwners(self, top=20):
         """
@@ -400,7 +400,7 @@ class Stock(Security):
         if not isinstance(top, int):
             raise TypeError('top parameter should be an integer')
         
-        return self.GetData("ownership/v1", url_suffixe= f"ConcentratedOwners/mutualfund/{top}/data")
+        return self.getData("ownership/v1", url_suffixe= f"ConcentratedOwners/mutualfund/{top}/data")
     
     def mutualFundOwnership(self, top=20):
         """
@@ -419,7 +419,7 @@ class Stock(Security):
         if not isinstance(top, int):
             raise TypeError('top parameter should be an integer')
         
-        return self.GetData("ownership/v1", url_suffixe= f"OwnershipData/mutualfund/{top}/data")
+        return self.getData("ownership/v1", url_suffixe= f"OwnershipData/mutualfund/{top}/data")
     
     def mutualFundSellers(self, top=20):
         """
@@ -438,7 +438,7 @@ class Stock(Security):
         if not isinstance(top, int):
             raise TypeError('top parameter should be an integer')
         
-        return self.GetData("ownership/v1", url_suffixe= f"Sellers/mutualfund/{top}/data")
+        return self.getData("ownership/v1", url_suffixe= f"Sellers/mutualfund/{top}/data")
     
     def operatingGrowth(self):
         """
@@ -451,7 +451,7 @@ class Stock(Security):
             >>> Stock("visa", exchange="nyse").operatingGrowth()
 
         """
-        return self.GetData("keyStats/growthTable", url_suffixe='')
+        return self.getData("keyStats/growthTable", url_suffixe='')
     
     def operatingMargin(self):
         """
@@ -464,7 +464,7 @@ class Stock(Security):
             >>> Stock("visa", exchange="nyse").operatingMargin()
     
         """
-        return self.GetData("keyStats/OperatingAndEfficiency", url_suffixe='')
+        return self.getData("keyStats/OperatingAndEfficiency", url_suffixe='')
     
     def operatingPerformance(self):
         """
@@ -477,7 +477,7 @@ class Stock(Security):
             >>> Stock("visa", exchange="nyse").operatingPerformance()
 
         """
-        return self.GetData("operatingPerformance/v2", url_suffixe='')
+        return self.getData("operatingPerformance/v2", url_suffixe='')
     
     def split(self):
         """
@@ -490,7 +490,7 @@ class Stock(Security):
             >>> Stock("visa", exchange="nyse").split()
         
         """
-        return self.GetData("split")
+        return self.getData("split")
     
     def trailingTotalReturn(self):
         """
@@ -503,7 +503,7 @@ class Stock(Security):
             >>> Stock("visa", exchange="nyse").trailingTotalReturn()
       
         """
-        return self.GetData("trailingTotalReturns")
+        return self.getData("trailingTotalReturns")
     
     def transactionHistory(self):
         """
@@ -516,7 +516,7 @@ class Stock(Security):
             >>> Stock("visa", exchange="nyse").transactionHistory()
 
         """
-        return self.GetData("insiders/transactionHistory")
+        return self.getData("insiders/transactionHistory")
     
     
     def transactionSummary(self):
@@ -530,7 +530,7 @@ class Stock(Security):
             >>> Stock("visa", exchange="nyse").transactionSummary()
    
         """
-        return self.GetData("insiders/transactionChart")
+        return self.getData("insiders/transactionChart")
     
     def valuation(self):
         """
@@ -543,4 +543,4 @@ class Stock(Security):
             >>> Stock("visa", exchange="nyse").valuation()
     
         """
-        return self.GetData("valuation", url_suffixe='')
+        return self.getData("valuation", url_suffixe='')
