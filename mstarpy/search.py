@@ -95,8 +95,8 @@ def general_search(params, proxies={}):
   url = "https://tools.morningstar.co.uk/api/rest.svc/klr5zyak8x/security/screener"
   #headers
   headers = {
-              'user-agent': random_user_agent(),
-              }   
+    'user-agent': random_user_agent(),
+  }   
 
   response = requests.get(url,params=params, headers=headers,proxies=proxies)
 
@@ -248,16 +248,16 @@ def search_funds(term, field, country = "", pageSize=10, currency ='EUR', filter
           filter_list.append(f'{f}:IN:{filters[f]}')
 
   params = {
-  'page' : 1,
-  'pageSize' : pageSize,
-  'sortOrder' : 'LegalName asc',
-  'outputType' : 'json',
-  'version' : 1,
-  'universeIds' : universeIds,
-  'currencyId': currency,
-  'securityDataPoints' : securityDataPoints,
-  'term' : term,
-  'filters' : '|'.join(filter_list),
+    'page' : 1,
+    'pageSize' : pageSize,
+    'sortOrder' : 'LegalName asc',
+    'outputType' : 'json',
+    'version' : 1,
+    'universeIds' : universeIds,
+    'currencyId': currency,
+    'securityDataPoints' : securityDataPoints,
+    'term' : term,
+    'filters' : '|'.join(filter_list),
   }
 
   result = general_search(params, proxies=proxies)
