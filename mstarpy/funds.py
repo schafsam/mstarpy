@@ -3,7 +3,7 @@ import json
 import pandas as pd
 import re
 import requests
-from waring import deprecated
+import warnings
 from bs4 import BeautifulSoup
 
 from .error import no_site_error, not_200_response
@@ -110,7 +110,7 @@ class Funds(Security):
 
 
 
-    def keyStats(self):
+    def keyStats(self, normalize_keys=False):
         """
         This function retrieves the key status information of the funds, index, category or the annual rank of the funds.
 
@@ -151,10 +151,23 @@ class Funds(Security):
             elif key and value:
                 details.append({key: value})
 
+        if normalize_keys:
+            keys_norm = [
+                "NAV", "Day Change", "Morningstar Category", "IA Sector",
+                "ISIN", "Fund Size (Mil)","Share Class Size (Mil)", "Max Initial Charge",
+                "Ongoing Charge"
+                ]
+            for i in range(len(details)):
+                keys = list(set(details[i].keys()) - set(["date"]))
+                _dict = details[i]
+                _dict[keys_norm[i]] = _dict.pop(keys[0])
+                details[i] = _dict
+
+
         return details
 
-    @deprecated("This method will be replaced by 'anualPerformance' methode of the Funds class.")
     def AnnualPerformance(self, cat):
+        warnings.warn("This method will be replaced by 'anualPerformance' methode of the Funds class.", DeprecationWarning)
         return self.annualPerformance(cat)
 
     def annualPerformance(self, cat):
@@ -398,8 +411,9 @@ class Funds(Security):
         return self.getData(f"distribution/{period}")
 
 
-    @deprecated("This method will be replaced by 'cumulativePerformance' methode of the Funds class.")
+    
     def CumulativePerformance(self, cat):
+        warnings.warn("This method will be replaced by 'cumulativePerformance' methode of the Funds class.", DeprecationWarning)
         return self.cumulativePerformance(cat)
 
     def cumulativePerformance(self, cat):

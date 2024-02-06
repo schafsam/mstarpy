@@ -2,7 +2,7 @@ import datetime
 import json
 import re
 import requests
-from warnings import deprecated
+import warnings
 
 from .error import not_200_response
 from .search import search_funds, search_stock, token_chart
@@ -121,8 +121,9 @@ class Security:
             else:
                 raise ValueError(f'0 {self.asset_type} found with the term {term}')
             
-    @deprecated("Use the 'getData' method. This method will be depreciated.")
+    
     def GetData(self,field,params={},headers={}, url_suffixe='data'):
+        warnings.warn("Use the 'getData' method. This method will be depreciated.", DeprecationWarning)
         return self.getData(field, params, headers, url_suffixe)
 
     def getData(self, field, params={}, headers={}, url_suffixe='data'):
@@ -220,8 +221,8 @@ class Security:
         else:
             return {}
 
-    @deprecated()
     def TimeSeries(self, field, start_date, end_date, frequency="daily"):
+        warnings.warn("Use the 'timeSeries' method. This method will be depreciated.", DeprecationWarning)
         return self.timeSeries(field, start_date, end_date, frequency)
 
     def timeSeries(self, field, start_date, end_date, frequency="daily"):
