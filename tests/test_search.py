@@ -47,8 +47,8 @@ def test_search_filters():
     assert "PSRatio" in filter_options 
 
 def test_search_stock():
-    stock = search_stock('FR0014003J32','LegalName',exchange="PARIS")
-    assert stock.name == ""
+    stock_list = search_stock('FR0014003J32','LegalName',exchange="PARIS")
+    assert stock_list[0]["LegalName"] == "NamR SA Ordinary Shares"
 
 def test_search_stock_with_fields():
     stock_list = search_stock(
