@@ -158,11 +158,11 @@ def test_fund_multiple_request_method():
 
 def test_fund_web_requests():
     funds = Funds("LU1085283973", country="fr")
-    funds.annualPerformance()
+    funds.annualPerformance(cat="funds")
     time.sleep(1)
     funds.contact()
     time.sleep(1)
-    funds.cumulativePerformance()
+    funds.cumulativePerformance(cat="funds")
     time.sleep(1)
     funds.fees() 
     time.sleep(1)
